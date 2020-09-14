@@ -13,6 +13,15 @@ from django.views.generic import (
 class ProductHomeView(ListView):
     model = Item
     template_name = 'home-page.html'
+    paginate_by = 8
+    ordering = 'title'
+
+
+class ProductsView(ListView):
+    model = Item
+    template_name = 'products.html'
+    paginate_by = 12
+    ordering = 'title'
 
 
 class ProductDetailView(DetailView):
