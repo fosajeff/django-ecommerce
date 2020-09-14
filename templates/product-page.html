@@ -50,6 +50,7 @@
 
           <p>{{ object.description }}</p>
 
+          {% comment %}
           <form class="d-flex justify-content-left">
             <!-- Default input -->
             <input
@@ -64,6 +65,18 @@
               <i class="fas fa-shopping-cart ml-1"></i>
             </button>
           </form>
+          {% endcomment %}
+          <a
+            href="{{ object.get_add_to_cart_url }}"
+            class="btn btn-primary btn-md my-0 p"
+          >
+            Add to cart
+            <i class="fas fa-shopping-cart ml-1"></i>
+          </a>
+          <a href="" class="btn btn-danger btn-md my-0 p">
+            Delete from cart
+            <i class="fas fa-shopping-cart ml-1"></i>
+          </a>
         </div>
         <!--Content-->
       </div>
