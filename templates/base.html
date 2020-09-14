@@ -2,14 +2,19 @@
 <!DOCTYPE html>
 
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <title>Material Design Bootstrap</title>
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"
+    />
     <!-- Bootstrap core CSS -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
     <!-- Material Design Bootstrap -->
@@ -44,11 +49,35 @@
             }
         }
     </style> -->
-</head>
+  </head>
 
-<body>
-    {% include "nav.html" %} {% block content %} {% endblock content %}
-    {% include "footer.html" %} {% include "scripts.html" %}
-</body>
+  {% include "nav.html" %}
 
+  <body>
+    {% if messages %} {% for message in messages %}
+    <div class="mt-5 pt-4">
+      <div
+        class="alert alert-{{ message.tags }} alert-dismissible fade show"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    {% endfor %} {% endif %}
+
+    <!-- Body -->
+
+    {% block content %} {% endblock content %}
+
+    <!-- Foot -->
+    {%include "footer.html" %} {%include "scripts.html" %}
+  </body>
 </html>
