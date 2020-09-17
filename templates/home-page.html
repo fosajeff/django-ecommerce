@@ -1,4 +1,40 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+
+<!-- title -->
+{% block head_title %} Home | Jeff Stores {% endblock %}
+
+{% block extra_head %}
+<style type="text/css">
+  html,
+  body,
+  header,
+  .carousel {
+    height: 60vh;
+  }
+
+  @media (max-width: 740px) {
+
+    html,
+    body,
+    header,
+    .carousel {
+      height: 100vh;
+    }
+  }
+
+  @media (min-width: 800px) and (max-width: 850px) {
+
+    html,
+    body,
+    header,
+    .carousel {
+      height: 100vh;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
 
 <!--Carousel Wrapper-->
 <div id="carousel-example-1z" class="carousel slide carousel-fade pt-4" data-ride="carousel">
@@ -36,7 +72,7 @@
                 anytime, checkout anytime.</strong>
             </p>
 
-            <a target="_self" href="/products" class="btn btn-outline-white btn-lg">Start Shopping
+            <a target="_self" href="{% url 'core:products' %}" class="btn btn-outline-white btn-lg">Start Shopping
               <i class="fas fa-shopping-cart ml-2"></i>
             </a>
           </div>
@@ -232,6 +268,9 @@
     {% if is_paginated %}
     <nav class="d-flex justify-content-center wow fadeIn">
       <ul class="pagination pg-blue">
+        <li class="page-item">
+          <a class="page-link" href="?page=1">First</a>
+        </li>
         <!--Arrow left-->
         {% if page_obj.has_previous %}
         <li class="page-item">
@@ -265,6 +304,9 @@
             <span aria-hidden="true">&raquo;</span>
             <span class="sr-only">Next</span>
           </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
         </li>
         {% endif %}
       </ul>

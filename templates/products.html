@@ -80,9 +80,9 @@
 
               <h4 class="font-weight-bold blue-text">
                 {% if item.get_discount_price %}
-                <strong>${{ item.get_discount_price }}</strong>
+                <strong>N{{ item.get_discount_price }}</strong>
                 {% else %}
-                <strong>${{ item.price }}</strong>
+                <strong>N{{ item.price }}</strong>
                 {% endif %}
               </h4>
             </div>
@@ -145,7 +145,6 @@
     </nav>
     {% endif %}
     <!--Pagination-->
-
   </div>
 </main>
 <!--Main layout-->

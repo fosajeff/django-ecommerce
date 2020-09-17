@@ -28,6 +28,11 @@ class ProductsView(ListView):
     ordering = 'title'
 
 
+class ProductDetailView(DetailView):
+    model = Item
+    template_name = 'product-page.html'
+
+
 class OrderSummary(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
@@ -41,11 +46,6 @@ class OrderSummary(LoginRequiredMixin, View):
         except ObjectDoesNotExist:
             messages.warning(self.request, "You do not have an active order.")
             return redirect('/')
-
-
-class ProductDetailView(TemplateView):
-    model = Item
-    template_name = 'product-page.html'
 
 
 class ProductCheckoutView(LoginRequiredMixin, View):
