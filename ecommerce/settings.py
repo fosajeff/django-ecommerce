@@ -1,4 +1,5 @@
 import os
+import dotenv
 
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 
@@ -71,6 +72,15 @@ DATABASES = {
         "NAME": os.path.join(BASE_DIR, 'db.sqlite3')
     }
 }
+
+# Add .env variables anywhere before SECRET_KEY
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
+
+# Update secret key
+# Instead of your actual secret key
+STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
 
 if ENVIRONMENT == 'production':
     DEBUG = False
