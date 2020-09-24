@@ -1,14 +1,22 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+{% block extra_head %}
+<style>
+  #tab1 tr:nth-child(even) {
+    background-color: #eee;
+  }
+</style>
+{% endblock extra_head %}
+{% block content %}
 
 <!--Main layout-->
 <main>
   <div class="container">
     <div class="mt-5">
-      <h2>Order Summary</h2>
+      <h2 class="mb-3">Order Summary</h2>
       <div class="table-responsive">
-        <table class="table">
+        <table class="table" id="tab1">
           <thead>
-            <tr>
+            <tr style="background-color: #888888;color: #fff;">
               <th scope="col">#</th>
               <th scope="col">Item title</th>
               <th scope="col">Price</th>
@@ -21,39 +29,30 @@
             <tr>
               <th scope="row">{{ forloop.counter }}</th>
               <td>
-                <a href="{{ order_item.item.get_absolute_url }}"
-                  >{{ order_item.item.title }}</a
-                >
+                <a href="{{ order_item.item.get_absolute_url }}">{{ order_item.item.title }}</a>
               </td>
               <td>
                 {% if order_item.item.get_discount_price %}
                 <!-- display discount price and amount saved -->
                 N {{ order_item.item.get_discount_price }}
 
-                <span class="badge badge-pill secondary-color"
-                  ><small
-                    >Saved N {{ order_item.get_amount_saved }}</small
-                  ></span
-                >
+                <span class="badge badge-pill secondary-color"><small>Saved N
+                    {{ order_item.get_amount_saved }}</small></span>
                 {% else %} N {{ order_item.item.price }}
               </td>
               {% endif %}
 
               <td>
-                <a
-                  href="{% url 'core:remove-single-item-from-cart' order_item.item.slug %}"
-                  ><i style="color: grey" class="fas fa-minus mr-2"></i
-                ></a>
+                <a href="{% url 'core:remove-single-item-from-cart' order_item.item.slug %}"><i style="color: grey"
+                    class="fas fa-minus mr-2"></i></a>
                 {{ order_item.quantity }}
-                <a href="{{ order_item.item.get_add_to_cart_url }}"
-                  ><i style="color: grey" class="fas fa-plus ml-2"></i
-                ></a>
+                <a href="{{ order_item.item.get_add_to_cart_url }}"><i style="color: grey"
+                    class="fas fa-plus ml-2"></i></a>
               </td>
               <td>
                 N {{ order_item.get_total_item_price }}
-                <a href="{{ order_item.item.get_remove_from_cart_url }}"
-                  ><i style="color: red" class="fas fa-trash float-right"></i
-                ></a>
+                <a href="{{ order_item.item.get_remove_from_cart_url }}"><i style="color: red"
+                    class="fas fa-trash float-right"></i></a>
               </td>
             </tr>
 
@@ -63,31 +62,20 @@
             </tr>
             <tr>
               <td colspan="5">
-                <a
-                  class="btn btn-primary float-right"
-                  href="{% url 'core:products' %}"
-                  >Continue Shopping</a
-                >
+                <a class="btn btn-primary float-right" href="{% url 'core:products' %}">Continue Shopping</a>
               </td>
             </tr>
 
             {% endfor %} {% if order.get_total %}
-            <tr>
+            <tr style="background-color: #fff;">
               <td colspan="4"><strong>Order Total</strong></td>
               <td><strong>N {{ order.get_total }}</strong></td>
             </tr>
             <tr>
               <td colspan="5">
-                <a
-                  class="btn btn-warning float-right ml-2"
-                  href="{% url 'core:checkout' %}"
-                  >Proceed to Checkout</a
-                >
-                <a
-                  class="btn btn-primary float-right"
-                  href="{% url 'core:products' %}"
-                  >Continue Shopping</a
-                >
+                <a class="btn btn-warning float-right ml-2 mb-2" href="{% url 'core:checkout' %}">Proceed to
+                  Checkout</a>
+                <a class="btn btn-primary float-right mb-2" href="{% url 'core:products' %}">Continue Shopping</a>
               </td>
             </tr>
             {% endif %}

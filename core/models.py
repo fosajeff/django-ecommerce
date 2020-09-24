@@ -25,6 +25,7 @@ class Item(models.Model):
     label = models.CharField(choices=LABEL_CHOICES, max_length=1)
     slug = models.SlugField(unique=True)
     description = models.TextField()
+    image = models.ImageField()
 
     def __str__(self):
         return self.title
@@ -47,6 +48,12 @@ class Item(models.Model):
         return reverse('core:remove-from-cart', kwargs={
             'slug': self.slug
         })
+
+    @property
+    def get_image_url(self):
+        if self.image:
+            return self.image.url
+        return '#'
 
 
 class OrderItem(models.Model):

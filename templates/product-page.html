@@ -7,11 +7,7 @@
     <div class="row wow fadeIn">
       <!--Grid column-->
       <div class="col-md-6 mb-4">
-        <img
-          src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/14.jpg"
-          class="img-fluid"
-          alt=""
-        />
+        <img src="{{ object.get_image_url }}" class="img-fluid" alt="" />
       </div>
       <!--Grid column-->
 
@@ -21,9 +17,7 @@
         <div class="p-4">
           <div class="mb-3">
             <a href="">
-              <span class="badge purple mr-1"
-                >{{ object.get_category_display }}</span
-              >
+              <span class="badge purple mr-1">{{ object.get_category_display }}</span>
             </a>
             {% comment %}
             <a href="">
@@ -53,30 +47,18 @@
           {% comment %}
           <form class="d-flex justify-content-left">
             <!-- Default input -->
-            <input
-              type="number"
-              value="1"
-              aria-label="Search"
-              class="form-control"
-              style="width: 100px"
-            />
+            <input type="number" value="1" aria-label="Search" class="form-control" style="width: 100px" />
             <button class="btn btn-primary btn-md my-0 p" type="submit">
               Add to cart
               <i class="fas fa-shopping-cart ml-1"></i>
             </button>
           </form>
           {% endcomment %}
-          <a
-            href="{{ object.get_add_to_cart_url }}"
-            class="btn btn-primary btn-md my-0 p"
-          >
+          <a href="{{ object.get_add_to_cart_url }}" class="btn btn-primary btn-md my-0 p mb-2">
             Add to cart
             <i class="fas fa-shopping-cart ml-1"></i>
           </a>
-          <a
-            href="{{ object.get_remove_from_cart_url }}"
-            class="btn btn-danger btn-md my-0 p"
-          >
+          <a href="{{ object.get_remove_from_cart_url }}" class="btn btn-danger btn-md my-0 p mb-2">
             Delete from cart
             <i class="fas fa-shopping-cart ml-1"></i>
           </a>
@@ -110,31 +92,19 @@
     <div class="row wow fadeIn">
       <!--Grid column-->
       <div class="col-lg-4 col-md-12 mb-4">
-        <img
-          src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg"
-          class="img-fluid"
-          alt=""
-        />
+        <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/14.jpg" class="img-fluid" alt="" />
       </div>
       <!--Grid column-->
 
       <!--Grid column-->
       <div class="col-lg-4 col-md-6 mb-4">
-        <img
-          src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/12.jpg"
-          class="img-fluid"
-          alt=""
-        />
+        <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/12.jpg" class="img-fluid" alt="" />
       </div>
       <!--Grid column-->
 
       <!--Grid column-->
       <div class="col-lg-4 col-md-6 mb-4">
-        <img
-          src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg"
-          class="img-fluid"
-          alt=""
-        />
+        <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg" class="img-fluid" alt="" />
       </div>
       <!--Grid column-->
     </div>
