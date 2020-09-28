@@ -36,8 +36,8 @@
                 <!-- display discount price and amount saved -->
                 N {{ order_item.item.get_discount_price }}
 
-                <span class="badge badge-pill secondary-color"><small>Saved N
-                    {{ order_item.get_amount_saved }}</small></span>
+                <span class="badge badge-pill secondary-color">Saved N
+                  {{ order_item.get_amount_saved }}</span>
                 {% else %} N {{ order_item.item.price }}
               </td>
               {% endif %}
@@ -71,6 +71,17 @@
               <td colspan="4"><strong>Order Total</strong></td>
               <td><strong>N {{ order.get_total }}</strong></td>
             </tr>
+            <!-- {% if coupon %}
+            {% for code in coupon %}
+            <tr style="background-color: #fff;">
+              <td colspan="4"><strong>Coupon{{ forloop.counter }}</strong></td>
+              <td>
+                <strong>{{ code }}</strong>
+                <span class="badge badge-pill green ml-1">{{ order.coupon.percentage_discount }}% off</span>
+              </td>
+            </tr>
+            {% endfor %}
+            {% endif %} -->
             <tr>
               <td colspan="5">
                 <a class="btn btn-warning float-right ml-2 mb-2" href="{% url 'core:checkout' %}">Proceed to

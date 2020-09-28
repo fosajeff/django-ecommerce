@@ -1,10 +1,12 @@
 {% extends "account/base.html" %} {% load i18n %}
 {% load crispy_forms_tags %}
-{% block head_title %}{% trans "Signup" %}{% endblock %} {% block content %}
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
 
 <main>
   <div class="container">
-    <section class="mb-4 pt-5">
+    <section class="mb-4">
       <div class="row wow fadeIn">
         <div class="col-6 offset-3 pt-5">
           <h1>{% trans "Sign Up" %}</h1>

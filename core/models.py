@@ -4,25 +4,41 @@ from django.shortcuts import reverse
 from django_countries.fields import CountryField
 
 
-CATEGORY_CHOICES = (
-    ('S', 'Shirt'),
-    ('SW', 'Sport wear'),
-    ('OW', 'Outwear')
-)
-
 LABEL_CHOICES = (
     ('P', 'primary'),
     ('S', 'secondary'),
     ('D', 'danger')
 )
 
+LABEL_TAGS = (
+    ('N', 'NEW'),
+    ('F', 'Featured'),
+    ('B', 'bestseller')
+)
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=30, unique=True)
+    slug = models.SlugField(max_length=30, unique=True)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'Categories'
+
 
 class Item(models.Model):
     title = models.CharField(max_length=20)
     price = models.FloatField()
     percentage_discount = models.IntegerField(blank=True, null=True)
-    category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
-    label = models.CharField(choices=LABEL_CHOICES, max_length=1)
+    category = models.ForeignKey(Category,
+                                 on_delete=models.SET_NULL, null=True, blank=True)
+    label_tag = models.CharField(
+        choices=LABEL_TAGS, max_length=1, null=True, blank=True)
+    label = models.CharField(choices=LABEL_CHOICES,
+                             max_length=1, null=True, blank=True)
     slug = models.SlugField(unique=True)
     description = models.TextField()
     image = models.ImageField()
@@ -73,7 +89,7 @@ class OrderItem(models.Model):
 
     def get_amount_saved(self):
         if self.item.get_discount_price():
-            return round(self.item.price - self.item.get_discount_price(), 2)
+            return round(self.item.price * self.quantity - self.get_total_item_price(), 2)
 
 
 class Order(models.Model):
@@ -87,11 +103,23 @@ class Order(models.Model):
         'BillingAddress', on_delete=models.SET_NULL, null=True, blank=True)
     payment = models.ForeignKey(
         'Payment', on_delete=models.SET_NULL, null=True, blank=True)
+    coupon = models.ForeignKey(
+        'Coupon', on_delete=models.SET_NULL, null=True, blank=True)
+    being_delivered = models.BooleanField(default=False)
+    received = models.BooleanField(default=False)
+    refund_requested = models.BooleanField(default=False)
+    refund_granted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
 
     def get_total(self):
+        if self.coupon:
+            if self.coupon.percentage_discount:
+                # apply the percentage discount of the coupon and get the new order total price
+                total = sum([price.get_total_item_price()
+                             for price in self.items.all()])
+                return round((100 - self.coupon.percentage_discount) / 100 * total, 2)
         return sum([price.get_total_item_price() for price in self.items.all()])
 
 
@@ -103,6 +131,9 @@ class BillingAddress(models.Model):
     country = CountryField(multiple=False)
     zip_code = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.user.username
+
 
 class Payment(models.Model):
     stripe_charge_id = models.CharField(max_length=50)
@@ -112,4 +143,12 @@ class Payment(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return user.username
+        return self.user.username
+
+
+class Coupon(models.Model):
+    code = models.CharField(max_length=15)
+    percentage_discount = models.IntegerField()
+
+    def __str__(self):
+        return self.code

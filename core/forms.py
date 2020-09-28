@@ -34,3 +34,12 @@ class CheckoutForm(forms.Form):
             'name': 'paymentMethod',
             'class': 'custom-control-input'
         }), choices=PAYMENT_OPTIONS)
+
+
+class CouponForm(forms.Form):
+    code = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Promo code',
+        'aria-label': "Recipient's username",
+        'aria-describedby': 'basic-addon2'
+    }))

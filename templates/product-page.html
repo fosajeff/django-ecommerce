@@ -16,9 +16,12 @@
         <!--Content-->
         <div class="p-4">
           <div class="mb-3">
-            <a href="">
-              <span class="badge purple mr-1">{{ object.get_category_display }}</span>
+            <a href="{% url 'core:category-filter' object.category.slug %}">
+              <span class="badge purple mr-1">{{ object.category }}</span>
             </a>
+            {% if object.percentage_discount %}
+            <span class="badge btn-warning mr-1">{{ object.percentage_discount }}% off</span>
+            {% endif %}
             {% comment %}
             <a href="">
               <span class="badge blue mr-1">New</span>

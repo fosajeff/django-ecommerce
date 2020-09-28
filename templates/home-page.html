@@ -224,7 +224,7 @@
           <div class="card">
             <!--Card image-->
             <div class="view overlay">
-              <img src="{{ item.get_image_url }}" class="card-img-top" alt="" width="100%" height="300px" />
+              <img src="{{ item.get_image_url }}" class="card-img-top" alt="" />
               <a href="{{ item.get_absolute_url }}">
                 <div class="mask rgba-white-slight"></div>
               </a>
@@ -234,13 +234,16 @@
             <!--Card content-->
             <div class="card-body text-center">
               <!--Category & Title-->
-              <a href="" class="grey-text">
-                <h5>{{ item.get_category_display }}</h5>
+              <a href="{% url 'core:category-filter' item.category.slug %}" class="grey-text">
+                <h5>{{ item.category }}</h5>
               </a>
               <h5>
                 <strong>
                   <a href="{{ item.get_absolute_url }}" class="dark-grey-text">{{ item.title }}
-                    <span class="badge badge-pill {{ item.get_label_display }}-color">bestseller</span>
+                    {% if item.get_label_tag_display %}
+                    <span
+                      class="badge badge-pill {{ item.get_label_display }}-color">{{ item.get_label_tag_display }}</span>
+                    {% endif %}
                   </a>
                 </strong>
               </h5>
