@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load cart_template_tags %}
+{% block content %}
+
+<body class="lighten-3">
+    <!--Main layout-->
+    <main class="mt-2">
+        <div class="container wow fadeIn">
+            <!-- Heading -->
+            <h2 class="my-4">Profile</h2>
+
+            <!--Grid row-->
+            <div class="row">
+                <!--Grid column-->
+                <div class="col-md-8 mb-4">
+                    <!--Card-->
+                    <div class="card">
+
+                        <!--Card image-->
+                        <div class="pl-3 pt-3">
+                            <img src="{{ profile.photo.url }}" style="border-radius: 20px; width: 20%;" class=""
+                                alt="" />
+                            <a href="#">
+                                <div class="mask rgba-white-slight"></div>
+                            </a>
+                        </div>
+
+                        <!--Card image-->
+
+                        <ul class="list-group pt-4 pl-3 mb-4">
+                            <span
+                                style="margin: -10px 0 0 0;font-weight: bold;font-size: 20px;">{{ profile.user.first_name }}
+                                {{ profile.user.last_name }}</span>
+                            <span class="text-muted">@{{ profile.user.username }}</span>
+                            <!-- <span class="h6">{{ profile.user.email }}</span> -->
+                            </li>
+                        </ul>
+                        <div class="container mb-3">
+                            <button class="btn btn-primary btn-block" id="edit">
+                                Edit
+                            </button>
+                        </div>
+                        <!--Card content-->
+                        <div class="hide-form">
+                            <form method="POST" class="card-body" action="{% url 'core:profile' %}">
+                                {% csrf_token %}
+                                <!--address-->
+                                <div style="margin-top: -40px; margin-left: -15px;" class="col-lg-4 col-md-12 mb-4">
+                                    <label for="address" class="">Username</label>
+                                    {{ form.username }}
+                                </div>
+
+                                <!--Grid row-->
+                                <div class="row">
+                                    <!--Grid column-->
+                                    <div class="col-lg-4 col-md-12 mb-4">
+                                        <label for="first_name">First name</label>
+                                        {{ form.first_name }}
+
+
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 mb-4">
+                                        <label for="last_name">Last name</label>
+                                        {{ form.last_name }}
+
+
+                                    </div>
+                                </div>
+                                <div class="container">
+                                    <button class="btn btn-primary btn-block" type="submit">
+                                        Save
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!--/.Card-->
+                </div>
+                <!--Grid column-->
+
+                <!--Grid column-->
+                {% if active_order %}
+                <div class="col-md-4 mb-4">
+
+                    <!-- Heading -->
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Active Order Items</span>
+                        <span class="badge badge-secondary badge-pill">{{ request.user | cart_item_count }}</span>
+                    </h4>
+
+                    <!-- Cart -->
+                    <ul class="list-group mb-3 z-depth-1">
+                        {% for order_item in active_order.items.all %}
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <a href="{{ order_item.item.get_absolute_url }}" class="blue">
+                                    <h6 class="my-0">{{ order_item.quantity }} x {{ order_item.item.title }}</h6>
+                                </a>
+                                <small class="text-muted">{{ order_item.item.category }}</small>
+                            </div>
+                            <span class="text-muted">N {{ order_item.get_total_item_price }}</span>
+                        </li>
+                        {% endfor %}
+                        <li class="p-2 d-flex justify-content-between lh-condensed">
+                            <a href="{% url 'core:order-summary' %}" class="btn btn-secondary btn-md my-0 p">
+                                Go to cart
+                                <i class="fas fa-shopping-cart"></i>
+                            </a>
+                            <a href="{% url 'core:products' %}" class="btn btn-info btn-md my-0 p">
+                                Continue shopping
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- Cart -->
+
+                    <!-- Promo code -->
+                    {% if DISPLAY_COUPON_FORM %}
+                    <form class="card p-2" method="POST" action="{% url 'core:add-coupon' %}">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            {{ couponform.code }}
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary btn-md waves-effect m-0" type="submit">
+                                    Redeem
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %}
+                    <!-- Promo code -->
+                </div>
+                {% endif %}
+
+
+                <!--Previous Orders-->
+                {% if active_order %}
+                <div class="col-md-12 mb-4">
+                    <!-- Heading -->
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Previous Orders</span>
+                        <span class="badge badge-secondary badge-pill">{{ prev_order.count }}</span>
+                    </h4>
+
+                    <!-- Cart -->
+                    <ul class="list-group mb-3 z-depth-1">
+
+                        {% for order_item in active_order.items.all %}
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <a href="" class="blue">
+                                    <h6 class="my-0">{{ active_order.ref_code }}</h6>
+                                </a>
+                            </div>
+                            <span class="text-muted">{{ active_order.payment.timestamp }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <!-- Cart -->
+                </div>
+                {% endif %}
+            </div>
+            <!--Grid row-->
+        </div>
+    </main>
+    <!--Main layout-->
+</body>
+
+{% endblock content %}

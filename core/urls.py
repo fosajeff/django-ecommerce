@@ -10,7 +10,9 @@ from .views import (
     remove_from_cart,
     remove_single_from_cart,
     AddCouponView,
-    get_items_by_category
+    get_items_by_category,
+    RefundPaymentView,
+    UserProfileView,
 )
 
 app_name = 'core'
@@ -32,4 +34,6 @@ urlpatterns = [
          ProductPaymentView.as_view(), name='payment'),
     path('products/category/<slug>',
          get_items_by_category, name='category-filter'),
+    path('request-refund/', RefundPaymentView.as_view(), name='request-refund'),
+    path('profile/', UserProfileView.as_view(), name='profile'),
 ]

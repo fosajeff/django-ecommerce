@@ -3,19 +3,26 @@ from django.shortcuts import render, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.utils import timezone
-from .models import Order, OrderItem, Item, BillingAddress, Payment, Coupon, Category
-from .forms import CheckoutForm, CouponForm
+from .models import Order, OrderItem, Item, BillingAddress, Payment, Coupon, Category, Refund, Profile
+from .forms import CheckoutForm, CouponForm, RefundForm, UserForm
 from django.views.generic import (
     ListView,
     DetailView,
     TemplateView,
     View
 )
+import random
+import string
 import stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
+def create_ref_code():
+    return ''.join(random.choices(string.ascii_lowercase + string.digits, k=20))
 
 
 class HomeView(ListView):
@@ -123,6 +130,7 @@ class ProductPaymentView(View):
 
                 # assign payment to order
                 order.ordered = True
+                order.ref_code = create_ref_code()
                 order.payment = payment
                 order.save()
 
@@ -385,3 +393,96 @@ class AddCouponView(View):
                 return redirect('/')
         messages.warning(self.request, "Enter valid coupon code")
         return redirect('core:checkout')
+
+
+class RefundPaymentView(View):
+    def get(self, *args, **kwargs):
+        context = {
+            'form': RefundForm()
+        }
+        return render(self.request, 'request-refund.html', context)
+
+    def post(self, *args, **kwargs):
+        form = RefundForm(self.request.POST)
+        if form.is_valid():
+            ref_code = form.cleaned_data.get('ref_code')
+            message = form.cleaned_data.get('message')
+            email = form.cleaned_data.get('email')
+
+            try:
+                # edit order
+                order = Order.objects.get(ref_code=ref_code)
+                order.refund_requested = True
+                order.save()
+
+                # store the refund
+                refund = Refund()
+                refund.order = order
+                refund.reason = message
+                refund.email = email
+                refund.save()
+                messages.info(
+                    self.request, "Your request was sent successfully")
+                return redirect('core:request-refund')
+            except ObjectDoesNotExist:
+                messages.warning(
+                    self.request, "Order with reference code does not exist")
+                return redirect('core:request-refund')
+
+
+class UserProfileView(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        form = UserForm()
+        try:
+            prev_order = Order.objects.filter(
+                user=self.request.user, ordered=True)
+            active_order = Order.objects.get(
+                user=self.request.user, ordered=False)
+
+            try:
+                profile = Profile.objects.get(user=self.request.user)
+
+                context = {
+                    'profile': profile,
+                    'prev_order': prev_order,
+                    'active_order': active_order,
+                    'form': form
+                }
+
+            except ObjectDoesNotExist:
+                messages.info(self.request, "No profile for user")
+                return redirect('/')
+
+            return render(self.request, "profile.html", context)
+
+        except ObjectDoesNotExist:
+            pass
+
+    def post(self, *args, **kwargs):
+        form = UserForm(self.request.POST or None)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            first_name = form.cleaned_data.get('first_name')
+            last_name = form.cleaned_data.get('last_name')
+            if not username and not first_name and not last_name:
+                messages.info(
+                    self.request, "Invalid input, could not update your profile")
+                return redirect('core:profile')
+            else:
+                try:
+                    user = User.objects.get(
+                        username=self.request.user.username)
+                    if username:
+                        user.username = username
+                    if first_name:
+                        user.first_name = first_name
+                    if last_name:
+                        user.last_name = last_name
+                    user.save()
+                    messages.success(
+                        self.request, "Profile updated successfully")
+                    return redirect('core:profile')
+
+                except ObjectDoesNotExist:
+                    messages.info(self.request, "User does not exist")
+                    return redirect('/')

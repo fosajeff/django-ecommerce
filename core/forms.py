@@ -43,3 +43,30 @@ class CouponForm(forms.Form):
         'aria-label': "Recipient's username",
         'aria-describedby': 'basic-addon2'
     }))
+
+
+class RefundForm(forms.Form):
+    ref_code = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Reference code',
+    }))
+    message = forms.CharField(widget=forms.Textarea(attrs={
+        'class': 'form-control',
+        'rows': 4
+    }))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'mail@example.com',
+    }))
+
+
+class UserForm(forms.Form):
+    username = forms.CharField(max_length=30, required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+    }))
+    first_name = forms.CharField(max_length=30, required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+    }))
+    last_name = forms.CharField(max_length=30, required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+    }))

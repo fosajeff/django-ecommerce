@@ -19,7 +19,7 @@
             <tr style="background-color: #888888;color: #fff;">
               <th scope="col">#</th>
               <th scope="col">Item title</th>
-              <th scope="col">Price</th>
+              <th scope="col">Unit Price</th>
               <th scope="col">Quantity</th>
               <th scope="col">Total item price</th>
             </tr>
@@ -86,7 +86,7 @@
               <td colspan="5">
                 <a class="btn btn-warning float-right ml-2 mb-2" href="{% url 'core:checkout' %}">Proceed to
                   Checkout</a>
-                <a class="btn btn-primary float-right mb-2" href="{% url 'core:products' %}">Continue Shopping</a>
+                <a class="btn btn-info float-right mb-2" href="{% url 'core:products' %}">Continue Shopping</a>
               </td>
             </tr>
             {% endif %}

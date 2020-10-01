@@ -41,7 +41,7 @@ class Item(models.Model):
                              max_length=1, null=True, blank=True)
     slug = models.SlugField(unique=True)
     description = models.TextField()
-    image = models.ImageField()
+    image = models.ImageField(upload_to='items')
 
     def __str__(self):
         return self.title
@@ -95,6 +95,7 @@ class OrderItem(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
+    ref_code = models.CharField(max_length=20)
     items = models.ManyToManyField(OrderItem)
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField()
@@ -152,3 +153,22 @@ class Coupon(models.Model):
 
     def __str__(self):
         return self.code
+
+
+class Refund(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    reason = models.TextField()
+    accepted = models.BooleanField(default=False)
+    email = models.EmailField()
+
+    def __str__(self):
+        return f"{self.pk}"
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE)
+    photo = models.ImageField(upload_to='users')
+
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name}"
