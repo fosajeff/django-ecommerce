@@ -67,3 +67,8 @@ class UserForm(forms.Form):
     first_name = forms.CharField(max_length=30, required=False)
     last_name = forms.CharField(max_length=30, required=False)
     photo = forms.ImageField(allow_empty_file=True, required=False)
+
+
+class PaymentForm(forms.Form):
+    save = forms.BooleanField(required=False)
+    use_default = forms.BooleanField(required=False)

@@ -173,3 +173,22 @@
 </body>
 
 {% endblock content %}
+{% block extra_script %}
+<!-- profile click functionalities -->
+<script>
+    var edit = $('#edit');
+    var form = $('.hide-form');
+    var cancel = $('#cancel');
+    $(document).ready(function () {
+        form.hide();
+    });
+    document.getElementById('edit').addEventListener('click', function () {
+        form.show();
+        edit.hide();
+    });
+    document.getElementById('cancel').addEventListener('click', function () {
+        form.hide();
+        edit.show();
+    });
+</script>
+{% endblock extra_script %}
