@@ -41,8 +41,14 @@
   <!-- extra body -->
   {% block extra_body %} {% endblock %}
 
+  <!-- scripts -->
+  {% include "scripts.html" %}
+  {% block extra_script %}
+  {% endblock extra_script %}
+
   <!-- Foot -->
-  {%include "footer.html" %} {%include "scripts.html" %}
+  {%include "footer.html" %}
+
 </body>
 
 </html>

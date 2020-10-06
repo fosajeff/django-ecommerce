@@ -9,27 +9,29 @@ PAYMENT_OPTIONS = (
 
 
 class CheckoutForm(forms.Form):
-    street_address = forms.CharField(widget=forms.TextInput(attrs={
-        'id': 'address',
-        'class': 'form-control',
-        'placeholder': '1234 Main St'
-    }))
-    appartment_address = forms.CharField(required=False, widget=forms.TextInput(attrs={
-        'id': 'address-2',
-        'class': 'form-control',
-        'placeholder': 'Apartment or suite'
-    }))
-    country = CountryField(blank_label='(select country)').formfield(widget=CountrySelectWidget(attrs={
+    shipping_address = forms.CharField(required=False)
+    shipping_address2 = forms.CharField(required=False)
+    shipping_country = CountryField(blank_label='(select country)').formfield(required=False, widget=CountrySelectWidget(attrs={
         'id': 'country',
         'class': 'custom-select d-block w-100'
     }))
-    zip_code = forms.CharField(widget=forms.TextInput(attrs={
-        'id': 'zip',
-        'class': 'form-control'
+    shipping_zip_code = forms.CharField(required=False)
+    set_default_shipping = forms.BooleanField(required=False)
+    use_default_shipping = forms.BooleanField(required=False)
+
+    billing_address = forms.CharField(required=False)
+    billing_address2 = forms.CharField(required=False)
+    billing_country = CountryField(blank_label='(select country)').formfield(required=False, widget=CountrySelectWidget(attrs={
+        'id': 'country',
+        'class': 'custom-select d-block w-100'
     }))
-    same_shipping_address = forms.BooleanField(required=False)
-    save_info = forms.BooleanField(required=False)
+    billing_zip_code = forms.CharField(required=False)
+    same_billing_address = forms.BooleanField(required=False)
+    set_default_billing = forms.BooleanField(required=False)
+    use_default_billing = forms.BooleanField(required=False)
+
     payment_option = forms.ChoiceField(
+        required=False,
         widget=forms.RadioSelect(attrs={
             'name': 'paymentMethod',
             'class': 'custom-control-input'
@@ -61,12 +63,7 @@ class RefundForm(forms.Form):
 
 
 class UserForm(forms.Form):
-    username = forms.CharField(max_length=30, required=False, widget=forms.TextInput(attrs={
-        'class': 'form-control',
-    }))
-    first_name = forms.CharField(max_length=30, required=False, widget=forms.TextInput(attrs={
-        'class': 'form-control',
-    }))
-    last_name = forms.CharField(max_length=30, required=False, widget=forms.TextInput(attrs={
-        'class': 'form-control',
-    }))
+    username = forms.CharField(max_length=30, required=False)
+    first_name = forms.CharField(max_length=30, required=False)
+    last_name = forms.CharField(max_length=30, required=False)
+    photo = forms.ImageField(allow_empty_file=True, required=False)

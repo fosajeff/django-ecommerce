@@ -11,7 +11,7 @@ from .views import (
     remove_single_from_cart,
     AddCouponView,
     get_items_by_category,
-    RefundPaymentView,
+    RefundRequestView,
     UserProfileView,
 )
 
@@ -34,6 +34,6 @@ urlpatterns = [
          ProductPaymentView.as_view(), name='payment'),
     path('products/category/<slug>',
          get_items_by_category, name='category-filter'),
-    path('request-refund/', RefundPaymentView.as_view(), name='request-refund'),
+    path('request-refund/', RefundRequestView.as_view(), name='request-refund'),
     path('profile/', UserProfileView.as_view(), name='profile'),
 ]

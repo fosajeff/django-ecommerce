@@ -19,7 +19,7 @@
 
                         <!--Card image-->
                         <div class="pl-3 pt-3">
-                            <img src="{{ profile.photo.url }}" style="border-radius: 20px; width: 20%;" class=""
+                            <img src="{{ profile.get_image_url }}" style="border-radius: 20px; width: 20%;" class=""
                                 alt="" />
                             <a href="#">
                                 <div class="mask rgba-white-slight"></div>
@@ -43,34 +43,44 @@
                         </div>
                         <!--Card content-->
                         <div class="hide-form">
-                            <form method="POST" class="card-body" action="{% url 'core:profile' %}">
+                            <form method="POST" enctype="multipart/form-data" class="card-body"
+                                action="{% url 'core:profile' %}">
                                 {% csrf_token %}
                                 <!--address-->
-                                <div style="margin-top: -40px; margin-left: -15px;" class="col-lg-4 col-md-12 mb-4">
-                                    <label for="address" class="">Username</label>
-                                    {{ form.username }}
+                                <div style="margin-top:-40px;" class="row">
+                                    <div style="margin-top: -40px;" class="col-lg-4 col-md-6 mb-4 mt-1">
+                                        <label for="photo">Image</label>
+                                        {{ form.photo }}
+                                    </div>
+                                    <div class="col-lg-4 col-md-12 mb-4">
+                                        <label for="address" class="">Username</label>
+                                        <input type="text" name="username" value="{{ profile.user.username }}"
+                                            class="form-control">
+                                    </div>
                                 </div>
+
 
                                 <!--Grid row-->
                                 <div class="row">
                                     <!--Grid column-->
                                     <div class="col-lg-4 col-md-12 mb-4">
                                         <label for="first_name">First name</label>
-                                        {{ form.first_name }}
-
-
+                                        <input type="text" name="first_name" value="{{ profile.user.first_name }}"
+                                            class="form-control">
                                     </div>
                                     <div class="col-lg-4 col-md-6 mb-4">
                                         <label for="last_name">Last name</label>
-                                        {{ form.last_name }}
-
-
+                                        <input type="text" name="last_name" value="{{ profile.user.last_name }}"
+                                            class="form-control">
                                     </div>
                                 </div>
-                                <div class="container">
-                                    <button class="btn btn-primary btn-block" type="submit">
+                                <div class="row">
+                                    <button class="btn btn-primary btn-md ml-3" type="submit">
                                         Save
                                     </button>
+                                    <a id="cancel" class="btn btn-danger btn-md">
+                                        Cancel
+                                    </a>
                                 </div>
                             </form>
                         </div>
@@ -114,27 +124,12 @@
                     </ul>
                     <!-- Cart -->
 
-                    <!-- Promo code -->
-                    {% if DISPLAY_COUPON_FORM %}
-                    <form class="card p-2" method="POST" action="{% url 'core:add-coupon' %}">
-                        {% csrf_token %}
-                        <div class="input-group">
-                            {{ couponform.code }}
-                            <div class="input-group-append">
-                                <button class="btn btn-secondary btn-md waves-effect m-0" type="submit">
-                                    Redeem
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                    {% endif %}
-                    <!-- Promo code -->
                 </div>
                 {% endif %}
 
 
                 <!--Previous Orders-->
-                {% if active_order %}
+                {% if prev_order %}
                 <div class="col-md-12 mb-4">
                     <!-- Heading -->
                     <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -145,16 +140,27 @@
                     <!-- Cart -->
                     <ul class="list-group mb-3 z-depth-1">
 
-                        {% for order_item in active_order.items.all %}
+                        {% for order in prev_order %}
                         <li class="list-group-item d-flex justify-content-between lh-condensed">
                             <div>
                                 <a href="" class="blue">
-                                    <h6 class="my-0">{{ active_order.ref_code }}</h6>
+                                    <h6 class="my-0">Order Ref: {{ order.ref_code }}</h6>
                                 </a>
+                                {% if order.refund_granted %}
+                                <span class="badge btn-success mr-1 text-muted">Refund granted</span>
+                                {% elif order.refund_requested %}
+                                <span class="badge btn-warning mr-1 text-muted">Refund requested</span>
+
+                                {% endif %}
                             </div>
-                            <span class="text-muted">{{ active_order.payment.timestamp }}</span>
+                            <span class="text-muted">{{ order.payment.timestamp }}</span>
                         </li>
                         {% endfor %}
+                        <li class="p-2 d-flex justify-content-between lh-condensed">
+                            <a href="{% url 'core:request-refund' %}" class="btn btn-danger btn-block my-0 p">
+                                Request refund
+                            </a>
+                        </li>
                     </ul>
                     <!-- Cart -->
                 </div>

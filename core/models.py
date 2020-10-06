@@ -16,6 +16,11 @@ LABEL_TAGS = (
     ('B', 'bestseller')
 )
 
+ADDRESS_TYPE = (
+    ('B', 'Billing'),
+    ('S', 'Shipping')
+)
+
 
 class Category(models.Model):
     name = models.CharField(max_length=30, unique=True)
@@ -100,8 +105,10 @@ class Order(models.Model):
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField()
     ordered = models.BooleanField(default=False)
+    shipping_address = models.ForeignKey(
+        'Address', related_name='shipping_address', on_delete=models.SET_NULL, null=True, blank=True)
     billing_address = models.ForeignKey(
-        'BillingAddress', on_delete=models.SET_NULL, null=True, blank=True)
+        'Address', related_name='billing_address', on_delete=models.SET_NULL, null=True, blank=True)
     payment = models.ForeignKey(
         'Payment', on_delete=models.SET_NULL, null=True, blank=True)
     coupon = models.ForeignKey(
@@ -112,7 +119,7 @@ class Order(models.Model):
     refund_granted = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.user.username
+        return self.ref_code
 
     def get_total(self):
         if self.coupon:
@@ -124,16 +131,21 @@ class Order(models.Model):
         return sum([price.get_total_item_price() for price in self.items.all()])
 
 
-class BillingAddress(models.Model):
+class Address(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
     street_address = models.CharField(max_length=100)
     appartment_address = models.CharField(max_length=100)
     country = CountryField(multiple=False)
     zip_code = models.CharField(max_length=100)
+    address_type = models.CharField(max_length=1, choices=ADDRESS_TYPE)
+    default = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.user.username
+        return self.street_address
+
+    class Meta:
+        verbose_name_plural = 'Addresses'
 
 
 class Payment(models.Model):
@@ -156,19 +168,27 @@ class Coupon(models.Model):
 
 
 class Refund(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     reason = models.TextField()
     accepted = models.BooleanField(default=False)
     email = models.EmailField()
 
     def __str__(self):
-        return f"{self.pk}"
+        return f"{self.user.username} request {self.pk}"
 
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE)
-    photo = models.ImageField(upload_to='users')
+    photo = models.ImageField(upload_to='users', blank=True, null=True)
 
     def __str__(self):
-        return f"{self.user.first_name} {self.user.last_name}"
+        return f"{self.user.first_name} {self.user.last_name} ({self.user.username})"
+
+    @property
+    def get_image_url(self):
+        if self.photo:
+            return self.photo.url
+        return '#'
