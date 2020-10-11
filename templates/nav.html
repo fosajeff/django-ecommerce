@@ -40,29 +40,29 @@
               {{ request.user | cart_item_count }}
             </span>
             <i class="fas fa-shopping-cart"></i>
-            <span class="clearfix d-none d-sm-inline-block"> Cart </span>
+            <span class="clearfix d-sm-inline-block"> Cart </span>
           </a>
         </li>
         <li class="nav-item">
           <a href="{% url 'core:profile' %}" class="nav-link waves-effect">
-            <span class="clearfix d-none d-sm-inline-block"> Profile </span>
+            <span class="clearfix d-sm-inline-block"> Profile </span>
           </a>
         </li>
         <li class="nav-item">
           <a href="{% url 'account_logout' %}" class="nav-link waves-effect">
-            <span class="clearfix d-none d-sm-inline-block"> Logout </span>
+            <span class="clearfix d-sm-inline-block"> Logout </span>
           </a>
         </li>
 
         {% else %}
         <li class="nav-item">
           <a href="{% url 'account_login' %}" class="nav-link waves-effect">
-            <span class="clearfix d-none d-sm-inline-block"> Login </span>
+            <span class="clearfix d-sm-inline-block"> Login </span>
           </a>
         </li>
         <li class="nav-item">
           <a href="{% url 'account_signup' %}" class="nav-link waves-effect">
-            <span class="clearfix d-none d-sm-inline-block"> Signup </span>
+            <span class="clearfix d-sm-inline-block"> Signup </span>
           </a>
         </li>
         {% endif %}
