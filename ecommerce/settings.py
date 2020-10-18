@@ -1,4 +1,6 @@
 import os
+import django_heroku
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -120,3 +122,5 @@ SITE_ID = 1
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = 'core:home'
+
+django_heroku.settings(locals())
