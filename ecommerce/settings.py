@@ -1,9 +1,6 @@
 import os
-import environ
-
-env = environ.Env()
-# reading .env file
-environ.Env.read_env()
+from dotenv import load_dotenv
+load_dotenv()
 
 
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
@@ -11,10 +8,14 @@ ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 DEBUG = True
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# secret keys
-STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
+env_path = os.path.join(BASE_DIR, '.env')
+load_dotenv(dotenv_path=env_path)
 
-SECRET_KEY = env('SECRET_KEY')
+
+# secret keys
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
+
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 
 ALLOWED_HOSTS = []
@@ -71,8 +72,8 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# location where heroku puts staticfiles
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# location where heroku puts static
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_files')]
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
