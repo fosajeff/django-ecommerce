@@ -1,4 +1,5 @@
 from django.urls import path
+from django.contrib import admin
 from .views import (
     HomeView,
     ProductDetailView,
@@ -37,3 +38,9 @@ urlpatterns = [
     path('request-refund/', RefundRequestView.as_view(), name='request-refund'),
     path('profile/', UserProfileView.as_view(), name='profile'),
 ]
+
+# default: "Django Administration"
+admin.site.site_header = 'Jeff Stores'
+# default: "Site administration"
+admin.site.index_title = 'Jeff Stores Administration'
+admin.site.site_title = 'Jeff Stores Admin'  # default: "Django site admin"

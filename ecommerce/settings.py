@@ -7,7 +7,7 @@ load_dotenv()
 
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 
-DEBUG = True
+DEBUG = (os.environ.get('DEBUG_VALUE') == 'True')
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 env_path = os.path.join(BASE_DIR, '.env')
