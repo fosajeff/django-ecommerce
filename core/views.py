@@ -260,11 +260,13 @@ class ProductCheckoutView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
             order = Order.objects.get(user=self.request.user, ordered=False)
+            coupons = Coupon.objects.all()
             form = CheckoutForm()
             coupon_form = CouponForm()
             context = {
                 'order': order,
                 'form': form,
+                'coupons': coupons,
                 'couponform': coupon_form,
                 'DISPLAY_COUPON_FORM': True
             }
@@ -305,7 +307,6 @@ class ProductCheckoutView(LoginRequiredMixin, View):
                     'use_default_shipping')
 
                 if use_default_shipping:
-                    print("Using default shipping address")
                     shipping_address_qs = Address.objects.filter(
                         user=self.request.user,
                         address_type='S',
@@ -321,7 +322,6 @@ class ProductCheckoutView(LoginRequiredMixin, View):
                         return redirect('core:checkout')
 
                 else:
-                    print("creating new address")
                     shipping_address1 = form.cleaned_data.get(
                         'shipping_address')
                     shipping_address2 = form.cleaned_data.get(
@@ -370,7 +370,6 @@ class ProductCheckoutView(LoginRequiredMixin, View):
                     order.save()
 
                 elif use_default_billing:
-                    print("Using default billing address")
                     billing_address_qs = Address.objects.filter(
                         user=self.request.user,
                         address_type='B',
@@ -386,7 +385,6 @@ class ProductCheckoutView(LoginRequiredMixin, View):
                         return redirect('core:checkout')
 
                 else:
-                    print("creating new address")
                     billing_address1 = form.cleaned_data.get(
                         'billing_address')
                     billing_address2 = form.cleaned_data.get(
@@ -555,6 +553,10 @@ class AddCouponView(View):
                 # save coupon in user order if valid
                 order = Order.objects.get(
                     user=self.request.user, ordered=False)
+
+                if order.coupon or order.coupon == coupon:
+                    messages.info(self.request, "Offer applied already")
+                    return redirect('core:checkout')
                 order.coupon = coupon
                 order.save()
                 messages.success(self.request, "Coupon added successfully")

@@ -25,6 +25,18 @@
         </div>
         <span class="text-success">{{ order.coupon.percentage_discount }}% off</span>
     </li>
+    {% else %}
+    {% if coupons %}
+    {% for coupon in coupons %}
+    <li class="list-group-item d-flex justify-content-between bg-light">
+        <div class="text-success">
+            <h6 class="my-0">Available promo</h6>
+            <small>{{ coupon.code }}</small>
+        </div>
+        <span class="text-success">{{ coupon.percentage_discount }}% off</span>
+    </li>
+    {% endfor %}
+    {% endif %}
     {% endif %}
     <li class="list-group-item d-flex justify-content-between">
         <span>Total (NGR)</span>
