@@ -13,9 +13,8 @@ load_dotenv(dotenv_path=env_path)
 
 
 # secret keys
-STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
-
 SECRET_KEY = os.getenv('SECRET_KEY')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 
 
 ALLOWED_HOSTS = []
@@ -73,7 +72,7 @@ USE_L10N = True
 USE_TZ = True
 
 # location where heroku puts static
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_files')]
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -89,6 +88,7 @@ DATABASES = {
 if ENVIRONMENT == 'production':
     DEBUG = False
     SECRET_KEY = os.getenv('SECRET_KEY')
+    STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
     SESSION_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
