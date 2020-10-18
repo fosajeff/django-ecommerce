@@ -14,9 +14,12 @@ load_dotenv(dotenv_path=env_path)
 
 # secret keys
 SECRET_KEY = os.getenv('SECRET_KEY')
+DJANGO_SETTINGS_MODULE = os.getenv('DJANGO_SETTINGS_MODULE')
+
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = ['jeffstores.herokuapp.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
