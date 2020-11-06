@@ -118,6 +118,31 @@ AUTHENTICATION_BACKENDS = [
 
 SITE_ID = 1
 
+# EMAIL_BACKEND so allauth can proceed to send confirmation emails
+# ONLY for development/testing use console
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = DEFAULT_FROM_EMAIL = 'jeffstores@gmail.com'
+
+
+# Custom allauth settings
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+
+# Make email verification optional to allow for verification of email while able to login
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+
+# Eliminate need to provide username, as it's a very old practice
+ACCOUNT_USERNAME_REQUIRED = False
+
+# Note however that this only works when confirming the email address immediately after signing up,
+# assuming users didn’t close their browser or used some sort of private browsing mode.
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+
 # Crispy forms
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
